@@ -1,12 +1,9 @@
+import { getCategories } from '@/library/api-calls';
 import React from 'react';
 import { FaPenAlt, FaTrashAlt } from 'react-icons/fa';
 
-const CategoryPage = () => {
-    const categories = [
-        { id: 1, name: 'Electronics', slug: 'electronics', status: 'Active' },
-        { id: 2, name: 'Fashion', slug: 'fashion', status: 'Inactive' },
-        { id: 3, name: 'Home & Kitchen', slug: 'home-kitchen', status: 'Active' },
-    ];
+const CategoryPage = async () => {
+    const categories = await getCategories();
 
     return (
         <div className="container mx-auto px-4 sm:px-8">
@@ -51,24 +48,24 @@ const CategoryPage = () => {
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <span
                                                 className={`relative inline-block px-3 py-1 font-semibold leading-tight ${category.status === 'Active'
-                                                        ? 'text-green-900'
-                                                        : 'text-red-900'
+                                                    ? 'text-green-900'
+                                                    : 'text-red-900'
                                                     }`}
                                             >
                                                 <span
                                                     aria-hidden
-                                                    className={`absolute inset-0 opacity-50 rounded-full ${category.status === 'Active'
-                                                            ? 'bg-green-200'
-                                                            : 'bg-red-200'
+                                                    className={`absolute inset-0 opacity-50 rounded-full ${category.status == 1
+                                                        ? 'bg-green-200'
+                                                        : 'bg-red-200'
                                                         }`}
                                                 ></span>
-                                                <span className="relative">{category.status}</span>
+                                                <span className="relative">{category.status ? 'Active' : 'Inactive'}</span>
                                             </span>
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                                             <div className='flex gap-3'>
-                                            <FaTrashAlt />
-                                            <FaPenAlt />
+                                                <FaTrashAlt />
+                                                <FaPenAlt />
                                             </div>
                                         </td>
                                     </tr>

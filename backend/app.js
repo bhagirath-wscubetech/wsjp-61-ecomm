@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const CategoryRouter = require('./routers/category.router');
+const ProductRouter = require('./routers/product.router');
 
 const app = express();
 const port = 5000;
@@ -15,11 +17,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/', {
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err.message));
 
-// Routes
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
+app.use("/category", CategoryRouter);
+app.use("/product",ProductRouter);
 // Start server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
