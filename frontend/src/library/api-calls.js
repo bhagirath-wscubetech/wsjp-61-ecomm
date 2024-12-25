@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+
+
 const getCategories = () => {
-    return axios.get('http://localhost:5000/category')
+    return axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/category`)
         .then(
             (response) => {
                 return response.data.categories;

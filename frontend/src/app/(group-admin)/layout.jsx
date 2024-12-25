@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import SideBar from "@/components/admin/SideBar";
 import Header from "@/components/admin/Header";
+import { ToastContainer } from 'react-toastify';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+                <ToastContainer/>
                 <div className="grid grid-cols-5">
                     <SideBar />
                     <div className="col-span-4">

@@ -13,7 +13,7 @@ const SideBar = () => {
     ];
 
     return (
-        <div className="h-screen bg-gray-800 text-white flex flex-col">
+        <div className="min-h-screen bg-gray-800 text-white flex flex-col">
             <div className="p-4 text-2xl font-bold">Admin Panel</div>
             <nav className="flex-1">
                 <ul>
