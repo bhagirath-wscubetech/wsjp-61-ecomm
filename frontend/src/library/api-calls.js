@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { axiosInstance } from './helper';
 
 
 
 const getCategories = () => {
-    return axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/category`)
+    return axiosInstance.get(`/category`)
         .then(
             (response) => {
                 return response.data.categories;
@@ -15,4 +16,18 @@ const getCategories = () => {
         )
 }
 
-export { getCategories };
+const getTrashedCategories = () => {
+    return axiosInstance.get("/category/get-trashed")
+        .then(
+            (response) => {
+                return response.data.categories;
+            }
+        ).catch(
+            () => {
+                return [];
+            }
+        )
+}
+
+
+export { getCategories,getTrashedCategories };

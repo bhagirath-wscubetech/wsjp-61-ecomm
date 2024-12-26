@@ -2,6 +2,27 @@ const CategoryModel = require("../models/categoy.model");
 const { body } = require('express-validator');
 
 const CategoryController = {
+
+    async categoryExists(req, res) {
+        try {
+            const { name } = req.params;
+            const category = await CategoryModel.findOne({ name });
+            if (category) {
+                res.send({
+                    flag: 0
+                })
+            } else {
+                res.send({
+                    flag: 1
+                })
+            }
+        } catch (error) {
+            res.send({
+                message: "Internal server error",
+                flag: 0
+            })
+        }
+    },
     async read(req, res) {
         try {
             const { id } = req.params;
@@ -12,7 +33,7 @@ const CategoryController = {
                     category
                 })
             } else {
-                const categories = await CategoryModel.find().sort({ createdAt: -1 });
+                const categories = await CategoryModel.find({ deletedAt: null }).sort({ createdAt: -1 });
                 res.send({
                     flag: 1,
                     categories
@@ -21,6 +42,21 @@ const CategoryController = {
         } catch (error) {
             res.send({
                 message: "Internal server error",
+                flag: 0
+            })
+        }
+    },
+    async readTrashed(req, res) {
+        try {
+            const categories = await CategoryModel.find({ deletedAt: { $ne: null } }).sort({ deletedAt: -1 });
+            res.send({
+                flag: 1,
+                categories
+            })
+        } catch (error) {
+            res.send({
+                message: "Internal server error",
+                error: error.message,
                 flag: 0
             })
         }
@@ -70,11 +106,48 @@ const CategoryController = {
     update(req, res) {
 
     },
-    toggleStatus(req, res) {
-
+    async toggleStatus(req, res) {
+        try {
+            const { id, new_status } = req.params;
+            await CategoryModel.updateOne(
+                {
+                    _id: id
+                },
+                {
+                    status: new_status
+                }
+            )
+            res.send({
+                message: "Status changed",
+                flag: 1
+            })
+        } catch (error) {
+            res.send({
+                message: "Internal server error",
+                error: error.message,
+                flag: 0
+            })
+        }
     },
-    moveToTrash(req, res) {
-
+    async moveToTrash(req, res) {
+        try {
+            const { id } = req.params;
+            await CategoryModel.updateOne(
+                { _id: id },
+                {
+                    deletedAt: new Date().toISOString()
+                }
+            );
+            res.send({
+                message: "Moved to trash",
+                flag: 1
+            })
+        } catch (error) {
+            res.send({
+                message: "Internal server error",
+                flag: 0
+            })
+        }
     }
 }
 

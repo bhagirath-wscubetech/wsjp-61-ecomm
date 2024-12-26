@@ -15,6 +15,10 @@ const categorySchema = new Schema(
         status: {
             type: Boolean,
             default: true
+        },
+        deletedAt: {
+            type: Date,
+            default: null
         }
     },
     {

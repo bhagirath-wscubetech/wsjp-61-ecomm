@@ -1,3 +1,11 @@
+import axios from "axios";
+
+const axiosInstance = axios.create(
+    {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL
+    }
+);
+
 const titleToSlug = (title) => {
     return title
         .trim()
@@ -28,4 +36,4 @@ const timeAgo = (dateString) => {
     }
 }
 
-export { titleToSlug, timeAgo };
+export { titleToSlug, timeAgo, axiosInstance };

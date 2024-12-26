@@ -1,15 +1,30 @@
 "use client";
 import PageHeader from "@/components/admin/PageHeader";
-import { titleToSlug } from "@/library/helper";
-import axios from "axios";
-import { useRef } from "react";
+import { axiosInstance, titleToSlug } from "@/library/helper";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 const AddCategory = () => {
     const name = useRef(null);
     const slug = useRef(null);
+    const [nameError, setNameError] = useState(false);
 
     const nameChangeHandler = () => {
+        axiosInstance.get(`/category/category-exists/${name.current.value}`)
+            .then(
+                (response) => {
+                    if (response.data.flag == 0) {
+                        setNameError(true);
+                    } else {
+                        setNameError(false);
+                    }
+                }
+            ).catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+
         slug.current.value = titleToSlug(name.current.value);
     }
 
@@ -22,13 +37,13 @@ const AddCategory = () => {
         console.log(data);
 
         // API call to add category
-        axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/category/create`, data)
+        axiosInstance.post(`/category/create`, data)
             .then(
                 (response) => {
                     if (response.data.flag == 1) {
                         e.target.reset();
                         toast.success(response.data.message);
-                    }else{
+                    } else {
                         toast.error(response.data.message);
                     }
                 }
@@ -65,6 +80,9 @@ const AddCategory = () => {
                                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     placeholder="Enter category name"
                                 />
+                                <span className="text-red-500">
+                                    {nameError && "Category name already exists"}
+                                </span>
                             </div>
                             <div className="mb-2">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="slug">
@@ -83,8 +101,9 @@ const AddCategory = () => {
                         </div>
                         <div className="flex justify-end">
                             <button
+                                disabled={nameError}
                                 type="submit"
-                                className="shadow bg-blue-500 focus:shadow-outline focus:outline-none text-white font-bold py-1 px-6 rounded"
+                                className="shadow bg-blue-500 focus:shadow-outline focus:outline-none text-white font-bold py-1 px-6 rounded disabled:opacity-[0.3]"
                             >
                                 Add Category
                             </button>
