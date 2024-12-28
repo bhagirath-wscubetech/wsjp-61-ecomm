@@ -22,10 +22,13 @@ CategoryRouter.put(
 CategoryRouter.patch(
     "/change-status/:id/:new_status", CategoryController.toggleStatus
 )
+CategoryRouter.patch(
+    "/restore/:id", CategoryController.restore
+)
 CategoryRouter.delete(
     "/delete/:id", CategoryController.delete
 )
-CategoryRouter.get(
+CategoryRouter.delete(
     "/move-to-trash/:id", CategoryController.moveToTrash
 )
 

@@ -1,10 +1,11 @@
 import DeleteBtn from '@/components/admin/DeleteBtn';
 import PageHeader from '@/components/admin/PageHeader';
+import RestoreBtn from '@/components/admin/RestoreBtn';
 import ToggleStatus from '@/components/admin/ToggleStatus';
 import { getTrashedCategories } from '@/library/api-calls';
 import { timeAgo } from '@/library/helper';
 import React from 'react';
-import { FaPenAlt } from 'react-icons/fa';
+import { MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 const TrashPage = async () => {
     const categories = await getTrashedCategories();
@@ -60,8 +61,8 @@ const TrashPage = async () => {
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                                             <div className='flex gap-3'>
-                                                <DeleteBtn endpoint={`/category/move-to-trash/${category._id}`} />
-                                                <FaPenAlt />
+                                                <DeleteBtn endpoint={`/category/delete/${category._id}`} />
+                                                <RestoreBtn endpoint={`/category/restore/${category._id}`} />
                                             </div>
                                         </td>
                                     </tr>

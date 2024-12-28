@@ -101,10 +101,35 @@ const CategoryController = {
         }
     },
     delete(req, res) {
-
+        try {
+            const { id } = req.params;
+            CategoryModel.deleteOne({ _id: id })
+                .then(
+                    () => {
+                        res.send({ message: "Category deleted", flag: 1 });
+                    }
+                ).catch(
+                    () => {
+                        res.send({ message: "Unable to delete category", flag: 0 });
+                    }
+                )
+        } catch (error) {
+            res.send({ message: "Internal server error", flag: 0 });
+        }
     },
-    update(req, res) {
-
+    async update(req, res) {
+        try {
+            const data = req.body;
+            const { id } = req.params;
+            const category = await CategoryModel.findByIdAndUpdate({ _id: id }, { name: data.name, slug: data.slug });
+            if (category) {
+                res.send({ message: "Category updated", flag: 1 });
+            } else {
+                res.send({ message: "Category not found", flag: 0 });
+            }
+        } catch (error) {
+            res.send({ message: "Interval server error", flag: 0 });
+        }
     },
     async toggleStatus(req, res) {
         try {
@@ -147,6 +172,23 @@ const CategoryController = {
                 message: "Internal server error",
                 flag: 0
             })
+        }
+    },
+    async restore(req, res) {
+        try {
+            const { id } = req.params;
+            CategoryModel.updateOne({ _id: id }, { deletedAt: null })
+                .then(
+                    () => {
+                        res.send({ message: "Category restored", flag: 1 });
+                    }
+                ).catch(
+                    () => {
+                        res.send({ message: "Unable to restore category", flag: 0 });
+                    }
+                )
+        } catch (error) {
+
         }
     }
 }

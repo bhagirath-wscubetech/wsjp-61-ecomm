@@ -2,14 +2,15 @@
 
 import { axiosInstance } from '@/library/helper';
 import React from 'react'
-import { FaTrashAlt } from 'react-icons/fa'
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { TbRestore } from "react-icons/tb";
 
-export default function DeleteBtn({ endpoint }) {
+
+export default function RestoreBtn({ endpoint }) {
     const router = useRouter();
-    const deleteHandler = () => {
-        axiosInstance.delete(endpoint)
+    const restoreHandler = () => {
+        axiosInstance.patch(endpoint)
             .then(
                 (response) => {
                     if (response.data.flag == 1) {
@@ -27,7 +28,7 @@ export default function DeleteBtn({ endpoint }) {
     }
     return (
         <>
-            <FaTrashAlt className='cursor-pointer' onClick={deleteHandler} />
+            <TbRestore className='cursor-pointer' onClick={restoreHandler} />
         </>
     )
 }

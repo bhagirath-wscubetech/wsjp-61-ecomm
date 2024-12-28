@@ -15,6 +15,18 @@ const getCategories = () => {
             }
         )
 }
+const getCategoryById = (id) => {
+    return axiosInstance.get(`/category/${id}`)
+        .then(
+            (response) => {
+                return response.data.category;
+            }
+        ).catch(
+            () => {
+                return [];
+            }
+        )
+}
 
 const getTrashedCategories = () => {
     return axiosInstance.get("/category/get-trashed")
@@ -30,4 +42,4 @@ const getTrashedCategories = () => {
 }
 
 
-export { getCategories,getTrashedCategories };
+export { getCategories, getTrashedCategories, getCategoryById };
