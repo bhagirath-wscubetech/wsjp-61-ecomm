@@ -27,6 +27,42 @@ const getCategoryById = (id) => {
             }
         )
 }
+const getColors = () => {
+    return axiosInstance.get(`/color`)
+        .then(
+            (response) => {
+                return response.data.colors;
+            }
+        ).catch(
+            () => {
+                return [];
+            }
+        )
+}
+const getProducts = () => {
+    return axiosInstance.get(`/product`)
+        .then(
+            (response) => {
+                return response.data.products;
+            }
+        ).catch(
+            () => {
+                return [];
+            }
+        )
+}
+const getProductById = (id) => {
+    return axiosInstance.get(`/product/${id}`)
+        .then(
+            (response) => {
+                return response.data.product;
+            }
+        ).catch(
+            () => {
+                return [];
+            }
+        )
+}
 
 const getTrashedCategories = () => {
     return axiosInstance.get("/category/get-trashed")
@@ -42,4 +78,4 @@ const getTrashedCategories = () => {
 }
 
 
-export { getCategories, getTrashedCategories, getCategoryById };
+export { getCategories, getColors, getProducts, getProductById, getTrashedCategories, getCategoryById };

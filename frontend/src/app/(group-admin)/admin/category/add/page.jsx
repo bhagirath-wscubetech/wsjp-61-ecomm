@@ -66,7 +66,6 @@ const AddCategory = () => {
                         <h2 className="text-xl font-semibold text-gray-800">Add New Category</h2>
                     </div>
                     <form onSubmit={submitHandler} className="w-full !bg-white shadow-lg p-5">
-                        <input type="color" />
                         <div className="grid grid-cols-2 gap-4">
                             <div className="mb-2">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="name">
