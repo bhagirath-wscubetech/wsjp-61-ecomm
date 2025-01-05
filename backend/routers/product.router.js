@@ -1,5 +1,6 @@
 const express = require('express');
 const ProductController = require('../controllers/product.controller.js');
+const fileUpload = require('express-fileupload');
 
 const ProductRouter = express.Router();
 
@@ -14,7 +15,11 @@ ProductRouter.get(
 // )
 
 ProductRouter.post(
-    "/create", ProductController.create
+    "/create",
+    fileUpload({
+        createParentPath: true
+    }),
+    ProductController.create
 )
 // ProductRouter.put(
 //     "/update/:id", ProductController.update

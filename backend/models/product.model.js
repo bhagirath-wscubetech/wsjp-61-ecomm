@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const CategoryModel = require('./categoy.model');
+const ColorModel = require('./color.model');
 
 const ProductSchema = new mongoose.Schema(
     {
@@ -16,12 +18,12 @@ const ProductSchema = new mongoose.Schema(
         },
         category: {
             type: mongoose.Schema.ObjectId,
-            ref: "Category"
+            ref: CategoryModel
         },
         colors: [
             {
                 type: mongoose.Schema.ObjectId,
-                ref: "Color"
+                ref: ColorModel
             }
         ],
         original_price: {
@@ -33,6 +35,9 @@ const ProductSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
+        discount_percentage: {
+            type: String
+        },
         stock: {
             type: Boolean,
             default: true
@@ -41,7 +46,10 @@ const ProductSchema = new mongoose.Schema(
             type: String
         },
         other_images: [
-            { type: String }
+            {
+                type: String,
+                default: null
+            }
         ],
         description: {
             type: String

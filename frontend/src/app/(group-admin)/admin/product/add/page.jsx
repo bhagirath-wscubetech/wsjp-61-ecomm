@@ -5,9 +5,13 @@ import { useRef, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { getColors, getCategories } from "@/library/api-calls";
 import Select from 'react-select';
+import ImageUpload from "@/components/admin/ImageUpload";
+import { useRouter } from "next/navigation";
 
 
 const AddCategory = () => {
+    const router = useRouter();
+    const [image, setImage] = useState(null);
     const name = useRef(null);
     const slug = useRef(null);
     const original_price = useRef(null);
@@ -18,6 +22,8 @@ const AddCategory = () => {
     const [colors, setColor] = useState([]);
     const [product_colors, setProductColor] = useState([]);
 
+
+    console.log("image", image);
     const getData = async () => {
         const categoryData = await getCategories();
         setCategory(categoryData);
@@ -70,21 +76,23 @@ const AddCategory = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        const data = {
-            name: e.target.name.value,
-            slug: e.target.slug.value,
-            category: e.target.category.value,
-            colors: JSON.stringify(product_colors) // array to string
-        }
-        console.log(data);
-        return;
+        const formData = new FormData();
+        formData.append('name', e.target.name.value);
+        formData.append('slug', e.target.slug.value);
+        formData.append('category', e.target.category.value);
+        formData.append('colors', JSON.stringify(product_colors));
+        formData.append('original_price', e.target.original_price.value);
+        formData.append('discounted_price', e.target.discounted_price.value);
+        formData.append('discount_percentage', e.target.discount_percentage.value);
+        formData.append("image", image);
 
         // API call to add category
-        axiosInstance.post(`/product/create`, data)
+        axiosInstance.post(`/product/create`, formData)
             .then(
                 (response) => {
                     if (response.data.flag == 1) {
                         e.target.reset();
+                        router.push("/admin/product");
                         toast.success(response.data.message);
                     } else {
                         toast.error(response.data.message);
@@ -220,18 +228,24 @@ const AddCategory = () => {
                                 />
                             </div>
                             <div className="mb-2">
-                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="discount_precentage">
+                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="discount_percentage">
                                     Discount Precentage
                                 </label>
                                 <input
                                     readOnly={true}
                                     ref={discount_percent}
                                     type="text"
-                                    id="discount_precentage"
-                                    name="discount_precentage"
+                                    id="discount_percentage"
+                                    name="discount_percentage"
                                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 />
                             </div>
+                        </div>
+                        <div className="mb-2">
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="discount_percentage">
+                                Upload Image
+                            </label>
+                            <ImageUpload onImageSelect={(d) => setImage(d)} isMulti={false} />
                         </div>
                         <div className="flex justify-end">
                             <button
