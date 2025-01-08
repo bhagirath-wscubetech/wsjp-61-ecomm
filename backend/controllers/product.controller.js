@@ -4,13 +4,23 @@ const ProductModel = require("../models/product.model");
 const ProductController = {
     async uploadOtherImages(req, res) {
         try {
+            const { product_id } = req.params; // product_id
             const other_images = req.files.other_images;
-            const { product_id } = req.params;
-            console.log(product_id);
-            console.log(other_images);
-            res.send("Hello");
+            const otherImagesNames = [];
+            for (let otherImage of other_images) {
+                const file_name = getRandomFileName(otherImage.name);
+                const destination = "./public/images/product/other-images/" + file_name;
+                await otherImage.mv(destination);
+                otherImagesNames.push(file_name);
+            }
+            const product = await ProductModel.findById(product_id);
+            const product_other_images = product.other_images;
+            const updated_names = [...product_other_images, ...otherImagesNames];
+            product.other_images = updated_names;
+            await product.save();
+            res.send({ flag: 1, message: "Images uploaded", other_images: updated_names });
         } catch (error) {
-
+            res.send({ flag: 0, message: "Internal server error" });
         }
     },
     async read(req, res) {

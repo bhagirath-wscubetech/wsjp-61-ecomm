@@ -10,9 +10,6 @@ import { FaPenAlt, FaTrashAlt } from 'react-icons/fa';
 
 const ProductPage = async () => {
     const products = await getProducts();
-
-
-
     return (
         <div className="container mx-auto px-4 sm:px-8">
             <div className="py-8">

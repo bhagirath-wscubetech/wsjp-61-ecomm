@@ -3,6 +3,7 @@ import { axiosInstance } from '@/library/helper';
 import React, { useState } from 'react'
 import { FaTimes } from 'react-icons/fa';
 import { GrGallery } from 'react-icons/gr'
+import { toast } from 'react-toastify';
 
 export default function MultipleImage({ other_images, name, product_id }) {
     const [images, setImages] = useState(other_images);
@@ -17,8 +18,14 @@ export default function MultipleImage({ other_images, name, product_id }) {
             formData.append('other_images', otherImage);
         }
         axiosInstance.post(`/product/upload-other-images/${product_id}`, formData)
-            .then(res => {
-                console.log(res);
+            .then(response => {
+                if (response.data.flag == 1) {
+                    toast.success(response.data.message);
+                    setImages(response.data.other_images);
+                    e.target.reset();
+                } else {
+                    toast.error(response.data.message);
+                }
             })
             .catch(err => {
                 console.log(err);
